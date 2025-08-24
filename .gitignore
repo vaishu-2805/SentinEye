@@ -1,87 +1,27 @@
-# Byte-compiled / optimized / DLL files
+# Screenshots and security screenshots directories
+screenshots/
+security_screenshots/
+
+# Python bytecode
 __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
+# Virtual environment
+venv/
 env/
-build/
-develop-eggs/
-dist/
-downloads/
-egg-info/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+.env/
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# mypy
-.mypy_cache/
-.dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# VS Code
+# IDE files
 .vscode/
+.idea/
+*.swp
+*.swo
 
-# Windows
-Thumbs.db
-Desktop.ini
-
-# macOS
+# OS specific files
 .DS_Store
-
-# Model files
-models/*.dat
-
-# Security screenshots
-security_screenshots/*.jpg
-
-# Batch files
-*.bat
+Thumbs.db
+desktop.ini
 
 # Log files
 *.log
-
-# Environment files
-.env
