@@ -788,11 +788,9 @@ class SecurityMonitor:
             
             # Draw face rectangles
             for i, (x, y, w, h) in enumerate(detected_faces):
-            for i, (x, y, w, h) in enumerate(detected_faces):
                 cv2.rectangle(frame, (x, y), (x + w, y + h), box_color, CONFIG['face_box_thickness'])
                 
                 # Add face number
-                person_index = i + 1
                 person_index = i + 1
                 cv2.putText(frame, f"Person {person_index}", 
                            (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, box_color, 2)
