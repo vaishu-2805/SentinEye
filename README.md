@@ -1,10 +1,11 @@
-# Face Tracker
+# Face Tracker & ATM Security Prototype
 
-A lightweight and efficient face tracking application that uses your webcam to detect and track human faces in real-time. The program draws bounding boxes around detected faces and displays the number of faces detected along with the current FPS (Frames Per Second).
+A comprehensive face tracking application suite that includes basic face detection and an advanced ATM security prototype system. Uses webcam for real-time face detection and tracking with security monitoring capabilities.
 
-This repository includes two versions:
+This repository includes three applications:
 1. **Simple Face Tracker** - Basic version with face detection only
-2. **Advanced Face Tracker** - Extended version with eye detection, screenshots, and more features
+2. **Advanced Face Tracker** - Extended version with eye detection, screenshots, and more features  
+3. **ATM Security Prototype** - Demonstration security system for ATM environments
 
 ## Features
 
@@ -14,9 +15,6 @@ This repository includes two versions:
 - Face counter showing number of detected faces
 - Configurable parameters for easy customization
 - Mirror mode (horizontal flip) for intuitive interaction
-- Face count warning when too many faces are detected (configurable via .env)
-- Head pose estimation to determine if a face is looking at the camera
-- Visual indicators showing pitch, yaw, and roll angles
 
 ### Advanced Face Tracker
 All features from the simple version, plus:
@@ -26,18 +24,31 @@ All features from the simple version, plus:
 - Toggle eye detection on/off (press 'e')
 - Enhanced statistics tracking
 - Organized screenshot storage
-- Face count warning with customizable threshold and message
-- Advanced head pose estimation controls
-- Toggle head pose estimation on/off (press 'p')
-- Toggle pose axes display on/off (press 'a')
+
+### 🏧 ATM Security Prototype (NEW!)
+An innovative security demonstration system featuring:
+- **Dual Window Interface**: Separate camera monitoring and keypad simulation windows
+- **Multi-Person Detection**: Automatic warning when more than one person is detected
+- **Security Alerts**: Visual and audio warnings during security breaches
+- **Automatic Screenshots**: Captures security incidents for review
+- **Transaction Blocking**: Prevents PIN entry during security breaches
+- **Real-time Status**: Live security status updates in both windows
+- **Professional UI**: ATM-style keypad with realistic design
+
+**Security Features:**
+- 🔴 Red warning boxes when multiple people detected
+- 🟢 Green secure status for single user
+- 📸 Automatic screenshot capture during breaches
+- 🔊 Audio alert system
+- ⏱️ Timed warning periods
+- 📊 Security breach statistics
 
 ## Requirements
 
 - Python 3.6 or higher
 - OpenCV library
-- python-dotenv (for configuration)
-- numpy (for numerical operations)
-- scipy (for mathematical functions)
+- Pygame (for ATM security audio alerts)
+- Tkinter (for ATM keypad interface - usually included with Python)
 - A working webcam
 
 ## Installation
@@ -50,31 +61,7 @@ All features from the simple version, plus:
 pip install -r requirements.txt
 ```
 
-3. Create the models directory (optional):
-
-```bash
-python download_models.py
-```
-
-This will create the models directory for future model files if needed.
-
 ## Usage
-
-### Configuration
-You can customize the face count warning by editing the `.env` file in the project root:
-
-```
-# Maximum number of faces before showing warning
-MAX_FACE_COUNT=3
-
-# Warning message to display when face count exceeds limit
-FACE_COUNT_WARNING_MESSAGE="Warning: Too many faces detected!"
-
-# Warning text color (BGR format)
-WARNING_TEXT_COLOR_B=0
-WARNING_TEXT_COLOR_G=0
-WARNING_TEXT_COLOR_R=255
-```
 
 ### Simple Face Tracker
 Run the simple face tracker application:
@@ -89,10 +76,7 @@ Or use the provided batch file (Windows):
 run_face_tracker.bat
 ```
 
-**Controls:**
-- Press 'q' to quit the application
-- Press 'p' to toggle head pose estimation on/off
-- Press 'a' to toggle pose axes display on/off
+Press 'q' to quit the application.
 
 ### Advanced Face Tracker
 Run the advanced face tracker application:
@@ -112,8 +96,43 @@ run_advanced_face_tracker.bat
 - Press 's' to take a screenshot
 - Press 'h' to toggle help text display
 - Press 'e' to toggle eye detection on/off
-- Press 'p' to toggle head pose estimation on/off
-- Press 'a' to toggle pose axes display on/off
+
+### 🏧 ATM Security Prototype
+Run the ATM security prototype:
+
+```bash
+python atm_security_prototype.py
+```
+
+Or use the provided batch file (Windows):
+
+```
+run_atm_security.bat
+```
+
+**Controls:**
+- Press 'q' to quit the camera application
+- Press 's' to take a manual screenshot
+- Press 'k' to open/close the keypad window
+- Press 'h' to toggle help display
+
+**How it Works:**
+1. **Camera Window**: Shows live feed with face detection
+   - Green boxes = Secure (1 person or less)
+   - Red boxes = Security breach (multiple people)
+   - Real-time security status display
+   
+2. **Keypad Window**: Simulates ATM PIN entry
+   - Numeric keypad for PIN entry
+   - Security status indicator
+   - Transaction blocking during breaches
+   - Warning popups for security alerts
+
+**Security Demo Scenarios:**
+- 👤 **Single Person**: Normal operation, green indicators, PIN entry allowed
+- 👥 **Multiple People**: Security breach mode, red warnings, PIN entry blocked
+- 📸 **Auto Documentation**: Screenshots automatically saved during security events
+- 🔊 **Audio Alerts**: Warning sounds when multiple people detected
 
 ## Configuration
 
@@ -132,13 +151,6 @@ You can customize the simple face tracker by modifying the `CONFIG` dictionary i
 | `min_neighbors` | How many neighbors each candidate rectangle should have | 5 |
 | `show_fps` | Whether to display FPS counter | True |
 | `flip_horizontal` | Flip the camera horizontally (mirror mode) | True |
-
-#### Head Pose Estimation Settings
-| Parameter | Description | Default Value |
-|-----------|-------------|---------------|
-| `enable_head_pose` | Whether to enable head pose estimation | True |
-| `show_pose_axes` | Whether to show pose axes | True |
-| `show_looking_status` | Whether to show if face is looking at camera | True |
 
 ### Advanced Face Tracker
 The advanced face tracker has additional configuration options in the `CONFIG` dictionary in the `advanced_face_tracker.py` file:
@@ -182,10 +194,32 @@ The advanced face tracker has additional configuration options in the `CONFIG` d
 | `screenshot_dir` | Directory to save screenshots | 'screenshots' |
 | `screenshot_format` | Format to save screenshots (jpg or png) | 'jpg' |
 
+### ATM Security Prototype Configuration
+The ATM security system can be customized by modifying the `CONFIG` dictionary in `atm_security_prototype.py`:
+
+#### Security Settings
+| Parameter | Description | Default Value |
+|-----------|-------------|---------------|
+| `max_safe_people` | Maximum safe number of people | 1 |
+| `warning_duration` | Duration to show warning (seconds) | 3 |
+| `auto_screenshot` | Auto screenshot on security breach | True |
+| `face_box_color` | Color for secure status (BGR) | (0, 255, 0) (green) |
+| `warning_box_color` | Color for warning status (BGR) | (0, 0, 255) (red) |
+
+#### Output Directories
+- **Screenshots**: `screenshots/` (manual screenshots)
+- **Security Screenshots**: `security_screenshots/` (automatic security breach captures)
+
 ## How It Works
 
 ### Face Detection
-Both versions of the application use the Haar Cascade classifier from OpenCV, which is a machine learning-based approach where a cascade function is trained from many positive and negative images. It's particularly efficient for face detection.
+All versions use the Haar Cascade classifier from OpenCV, which is a machine learning-based approach where a cascade function is trained from many positive and negative images. It's particularly efficient for face detection.
+
+### ATM Security System
+The security prototype implements a multi-threaded approach:
+1. **Camera Thread**: Continuously monitors for faces and security breaches
+2. **GUI Thread**: Manages the keypad interface and user interactions
+3. **Security Logic**: Coordinates between camera detection and transaction blocking
 
 The basic process for both versions:
 1. Captures video from your webcam
@@ -193,16 +227,6 @@ The basic process for both versions:
 3. Applies the face detection algorithm
 4. Draws rectangles around detected faces
 5. Displays the processed frame with face counts and FPS
-
-### Head Pose Estimation
-The application uses a simplified approach to estimate head pose using OpenCV only:
-
-1. Facial landmarks are estimated based on face geometry detected by OpenCV's face detector
-2. Six key points (nose tip, chin, eye corners, mouth corners) are approximated from the face rectangle
-3. The solvePnP algorithm from OpenCV calculates rotation and translation vectors
-4. These vectors are converted to Euler angles (pitch, yaw, roll)
-5. The application determines if a face is looking at the camera based on angle thresholds
-6. Visual indicators show the head's orientation with 3D axes and angle values
 
 ### Eye Detection (Advanced Version)
 The advanced version also uses a Haar Cascade classifier specifically trained for eye detection. For each detected face:
@@ -229,13 +253,11 @@ Some ideas for further extending this application:
 - Add face recognition to identify specific people
 - Track faces across frames to assign consistent IDs
 - Add emotion detection to recognize facial expressions
-- Enhance the head pose estimation with more accurate models
+- Implement facial landmark detection (nose, mouth, etc.)
 - Add age and gender estimation
 - Create a recording feature to save video
 - Implement motion detection to only track when movement occurs
 - Add a GUI for adjusting settings without modifying code
-- Implement attention tracking based on gaze direction
-- Add blink detection using eye aspect ratio
 
 ## License
 

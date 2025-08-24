@@ -1,9 +1,5 @@
 import cv2
 import time
-import os
-import numpy as np
-from dotenv import load_dotenv
-from head_pose_estimator import HeadPoseEstimator
 
 """
 Simple Face Tracking Application
@@ -13,9 +9,6 @@ It's designed to be efficient and easy to understand with minimal dependencies.
 
 Configuration parameters are at the top of the file for easy customization.
 """
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Configuration parameters - modify these to customize the application
 CONFIG = {
@@ -29,21 +22,6 @@ CONFIG = {
     'min_neighbors': 5,            # How many neighbors each candidate rectangle should have
     'show_fps': True,              # Whether to display FPS counter
     'flip_horizontal': True,       # Flip the camera horizontally (mirror mode)
-    
-    # Head pose estimation settings
-    'enable_head_pose': True,      # Whether to enable head pose estimation
-    'show_pose_axes': True,        # Whether to show pose axes
-    'show_looking_status': True,   # Whether to show if face is looking at camera
-    'landmark_model': 'models/shape_predictor_68_face_landmarks.dat',  # Path to dlib landmark model
-    
-    # Face count warning settings (loaded from .env file)
-    'max_face_count': int(os.getenv('MAX_FACE_COUNT', 1)),  # Maximum number of faces before showing warning
-    'face_count_warning_message': os.getenv('FACE_COUNT_WARNING_MESSAGE', 'Warning: Too many faces detected!'),
-    'warning_text_color': (
-        int(os.getenv('WARNING_TEXT_COLOR_B', 0)),
-        int(os.getenv('WARNING_TEXT_COLOR_G', 0)),
-        int(os.getenv('WARNING_TEXT_COLOR_R', 255))
-    ),
 }
 
 
@@ -57,22 +35,6 @@ def main():
         print("Error: Could not load face cascade classifier")
         return
     
-    # Initialize head pose estimator if enabled
-    head_pose_estimator = None
-    if CONFIG['enable_head_pose']:
-        try:
-            # Check if the landmark model file exists
-            if not os.path.exists(CONFIG['landmark_model']):
-                print(f"Warning: Landmark model file not found at {CONFIG['landmark_model']}")
-                print("Run download_models.py to download the required model files.")
-                CONFIG['enable_head_pose'] = False
-            else:
-                head_pose_estimator = HeadPoseEstimator(CONFIG['landmark_model'])
-                print("Head pose estimation enabled.")
-        except Exception as e:
-            print(f"Error initializing head pose estimator: {e}")
-            CONFIG['enable_head_pose'] = False
-    
     # Initialize the webcam
     cap = cv2.VideoCapture(CONFIG['camera_id'])
     
@@ -85,11 +47,7 @@ def main():
         print("Error: Could not open webcam")
         return
     
-    print("Face tracker started.")
-    print("Controls:")
-    print("  'q' - Quit the application")
-    print("  'p' - Toggle head pose estimation")
-    print("  'a' - Toggle pose axes display")
+    print("Face tracker started. Press 'q' to quit.")
     
     # Variables for FPS calculation
     fps = 0
@@ -130,33 +88,6 @@ def main():
                 CONFIG['box_color'], 
                 CONFIG['box_thickness']
             )
-            
-            # Estimate head pose if enabled
-            if CONFIG['enable_head_pose'] and head_pose_estimator is not None:
-                # Pass the face rectangle to the head pose estimator
-                face_rect = (x, y, w, h)
-                
-                # Get facial landmarks
-                landmarks = head_pose_estimator.get_landmarks(gray, face_rect)
-                
-                if landmarks is not None:
-                    # Estimate head pose
-                    success, rotation_vector, translation_vector, euler_angles = \
-                        head_pose_estimator.get_pose(gray, landmarks)
-                    
-                    if success:
-                        # Determine if face is looking at camera
-                        is_looking = head_pose_estimator.is_looking_at_camera(euler_angles)
-                        
-                        # Draw pose information if configured
-                        if CONFIG['show_pose_axes'] or CONFIG['show_looking_status']:
-                            head_pose_estimator.draw_pose_info(
-                                frame, 
-                                rotation_vector, 
-                                translation_vector, 
-                                euler_angles,
-                                is_looking if CONFIG['show_looking_status'] else None
-                            )
         
         # Calculate and display FPS
         frame_count += 1
@@ -182,8 +113,7 @@ def main():
             )
         
         # Display the number of faces detected
-        face_count = len(faces)
-        faces_text = f"Faces: {face_count}"
+        faces_text = f"Faces: {len(faces)}"
         cv2.putText(
             frame, 
             faces_text, 
@@ -194,35 +124,12 @@ def main():
             2
         )
         
-        # Display warning if face count exceeds the configured limit
-        if face_count > CONFIG['max_face_count']:
-            warning_text = CONFIG['face_count_warning_message']
-            cv2.putText(
-                frame,
-                warning_text,
-                (10, 110),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                CONFIG['warning_text_color'],
-                2
-            )
-        
         # Display the resulting frame
         cv2.imshow('Face Tracker', frame)
         
-        # Process key presses
-        key = cv2.waitKey(1) & 0xFF
-        
-        if key == ord('q'):  # Quit
+        # Exit if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-        elif key == ord('p'):  # Toggle head pose estimation
-            CONFIG['enable_head_pose'] = not CONFIG['enable_head_pose']
-            status = "enabled" if CONFIG['enable_head_pose'] else "disabled"
-            print(f"Head pose estimation {status}")
-        elif key == ord('a'):  # Toggle pose axes display
-            CONFIG['show_pose_axes'] = not CONFIG['show_pose_axes']
-            status = "enabled" if CONFIG['show_pose_axes'] else "disabled"
-            print(f"Pose axes display {status}")
     
     # Release the webcam and close all OpenCV windows
     cap.release()
