@@ -69,6 +69,18 @@ An innovative security demonstration system featuring:
 pip install -r requirements.txt
 ```
 
+## Virtual Environment
+
+This project uses a Python virtual environment located in the `env` directory. This directory should not be tracked by version control.
+
+To set up the environment, run the following commands in your terminal:
+
+```bash
+python -m venv env
+.\env\Scripts\Activate.ps1   # for Windows PowerShell
+pip install -r requirements.txt
+```
+
 ## Usage
 
 ### Simple Face Tracker
