@@ -37,6 +37,16 @@ echo - Press 'k' to toggle keypad
 echo - Press 'a' to display analytics report
 echo.
 
+:: Check if Python virtual environment exists
+if not exist "env\Scripts\activate.bat" (
+    echo Error: Python virtual environment not found
+    echo Please run 'python -m venv env' to create it
+    pause
+    exit /b
+)
+
+:: Activate the virtual environment and run the application
+call .\env\Scripts\activate.bat
 python atm_security_prototype.py
 
 echo.

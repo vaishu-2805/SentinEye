@@ -46,12 +46,16 @@ pip install -r requirements.txt
 if not exist screenshots mkdir screenshots
 if not exist security_screenshots mkdir security_screenshots
 
-:: Run the ATM security prototype
-echo.
-echo 🚀 Starting ATM Security Prototype...
-echo The keypad window will open automatically.
-echo Position windows side by side for best experience.
-echo.
+:: Check if Python virtual environment exists
+if not exist "env\Scripts\activate.bat" (
+    echo Error: Python virtual environment not found
+    echo Please run 'python -m venv env' to create it
+    pause
+    exit /b
+)
+
+:: Activate the virtual environment and run the application
+call .\env\Scripts\activate.bat
 python atm_security_prototype.py
 
 pause

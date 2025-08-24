@@ -11,6 +11,8 @@ __pycache__/
 venv/
 env/
 .env/
+.venv/
+ENV/
 
 # IDE files
 .vscode/
@@ -25,3 +27,8 @@ desktop.ini
 
 # Log files
 *.log
+logs/
+
+# Large model files (consider using Git LFS instead)
+# *.pt
+# *.caffemodel
