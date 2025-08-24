@@ -1,0 +1,34 @@
+# Screenshots and security screenshots directories
+screenshots/
+security_screenshots/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.env/
+.venv/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log files
+*.log
+logs/
+
+# Large model files (consider using Git LFS instead)
+# *.pt
+# *.caffemodel

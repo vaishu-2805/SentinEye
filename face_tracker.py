@@ -1,7 +1,5 @@
 import cv2
 import time
-import os
-from dotenv import load_dotenv
 
 """
 Simple Face Tracking Application
@@ -11,9 +9,6 @@ It's designed to be efficient and easy to understand with minimal dependencies.
 
 Configuration parameters are at the top of the file for easy customization.
 """
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Configuration parameters - modify these to customize the application
 CONFIG = {
@@ -27,15 +22,6 @@ CONFIG = {
     'min_neighbors': 5,            # How many neighbors each candidate rectangle should have
     'show_fps': True,              # Whether to display FPS counter
     'flip_horizontal': True,       # Flip the camera horizontally (mirror mode)
-    
-    # Face count warning settings (loaded from .env file)
-    'max_face_count': int(os.getenv('MAX_FACE_COUNT', 1)),  # Maximum number of faces before showing warning
-    'face_count_warning_message': os.getenv('FACE_COUNT_WARNING_MESSAGE', 'Warning: Too many faces detected!'),
-    'warning_text_color': (
-        int(os.getenv('WARNING_TEXT_COLOR_B', 0)),
-        int(os.getenv('WARNING_TEXT_COLOR_G', 0)),
-        int(os.getenv('WARNING_TEXT_COLOR_R', 255))
-    ),
 }
 
 
@@ -127,8 +113,7 @@ def main():
             )
         
         # Display the number of faces detected
-        face_count = len(faces)
-        faces_text = f"Faces: {face_count}"
+        faces_text = f"Faces: {len(faces)}"
         cv2.putText(
             frame, 
             faces_text, 
@@ -138,19 +123,6 @@ def main():
             (0, 0, 255), 
             2
         )
-        
-        # Display warning if face count exceeds the configured limit
-        if face_count > CONFIG['max_face_count']:
-            warning_text = CONFIG['face_count_warning_message']
-            cv2.putText(
-                frame,
-                warning_text,
-                (10, 110),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                CONFIG['warning_text_color'],
-                2
-            )
         
         # Display the resulting frame
         cv2.imshow('Face Tracker', frame)

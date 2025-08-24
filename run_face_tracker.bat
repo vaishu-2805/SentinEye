@@ -1,22 +1,28 @@
 @echo off
-echo Starting Face Tracker Application...
-echo Press 'q' to quit when the application is running
+echo Starting Simple Face Tracker...
+echo.
+echo FEATURES:
+echo   - Basic face detection
+echo   - FPS counter
+echo   - Face counting
+echo   - Configurable settings
+echo.
+echo Controls:
+echo   'q' - Quit the application
+echo.
 
-:: Check if Python is installed
-python --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Error: Python is not installed or not in PATH
-    echo Please install Python from https://www.python.org/downloads/
+:: Check if Python virtual environment exists
+if not exist "env\Scripts\activate.bat" (
+    echo Error: Python virtual environment not found
+    echo Please run 'python -m venv env' to create it
     pause
     exit /b
 )
 
-:: Check if requirements are installed
-echo Checking dependencies...
-pip install -r requirements.txt
-
-:: Run the face tracker
-echo Starting face tracker...
+:: Activate the virtual environment and run the application
+call .\env\Scripts\activate.bat
 python face_tracker.py
 
+echo.
+echo Face Tracker has stopped.
 pause
