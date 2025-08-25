@@ -822,6 +822,7 @@ class SecurityMonitor:
         self.cap = cv2.VideoCapture(CONFIG['camera_id'])
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, CONFIG['frame_width'])
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CONFIG['frame_height'])
+        self.cap.set(cv2.CAP_PROP_EXPOSURE, -4)
         
         if not self.cap.isOpened():
             print("Error: Could not open camera")
