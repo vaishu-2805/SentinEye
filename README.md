@@ -35,12 +35,14 @@ An innovative security demonstration system featuring:
 - **Real-time Status**: Live security status updates in both windows
 - **Professional UI**: ATM-style keypad with realistic design
 - **Threaded Architecture**: Improved performance with proper thread management
+- **Skeleton Detection**: Real-time body pose tracking using YOLO v11 model
 
 **Advanced Security Features (NEW!):**
 - 🧠 **Deep Learning-based Face Detection**: More accurate face detection using DNN models
 - 🔎 **Full Kalman Filter Tracking**: Advanced prediction of face positions for better tracking
 - 🛡️ **Anti-Spoofing Protection**: Detects fake faces and photos with blink detection & texture analysis
 - 📊 **Comprehensive Analytics**: Logging and statistics to monitor security events
+- 🦴 **Skeleton Detection**: Real-time body pose tracking and skeleton visualization with YOLO
 
 **Basic Security Features:**
 - 🔴 Red warning boxes when multiple people detected
@@ -57,6 +59,7 @@ An innovative security demonstration system featuring:
 - Pygame (for ATM security audio alerts)
 - NumPy (for signal processing)
 - Tkinter (for ATM keypad interface - usually included with Python)
+- Ultralytics (for YOLO pose detection)
 - A working webcam
 
 ## Installation
@@ -78,70 +81,74 @@ To set up the environment, run the following commands in your terminal:
 ```bash
 python -m venv env
 .\env\Scripts\Activate.ps1   # for Windows PowerShell
+# or
+.\env\Scripts\activate.bat   # for Windows Command Prompt
 pip install -r requirements.txt
 ```
 
+All the provided batch files will automatically check for and use the Python virtual environment.
+
 ## Usage
 
+## Batch Files for Easy Execution
+
+The project includes batch files to easily run each application:
+
+| Batch File | Application | Description |
+|------------|-------------|-------------|
+| `run_face_tracker.bat` | Simple Face Tracker | Runs the basic face detection application |
+| `run_advanced_face_tracker.bat` | Advanced Face Tracker | Runs the enhanced version with eye detection |
+| `run_atm_security.bat` | ATM Security Prototype | Runs the basic ATM security system |
+| `run_advanced_security.bat` | Advanced ATM Security | Runs the ATM security with advanced features |
+| `run_skeleton_tracker.bat` | Skeleton Detection | Runs the ATM security with skeleton detection |
+
+Each batch file will:
+1. Check if the Python virtual environment exists
+2. Activate the environment
+3. Run the corresponding Python application
+4. Provide clear instructions and controls
+
+## Application Controls
+
 ### Simple Face Tracker
-Run the simple face tracker application:
-
-```bash
-python face_tracker.py
-```
-
-Or use the provided batch file (Windows):
-
-```
-run_face_tracker.bat
-```
-
-Press 'q' to quit the application.
+- Press 'q' to quit the application
 
 ### Advanced Face Tracker
-Run the advanced face tracker application:
-
-```bash
-python advanced_face_tracker.py
-```
-
-Or use the provided batch file (Windows):
-
-```
-run_advanced_face_tracker.bat
-```
-
-**Controls:**
 - Press 'q' to quit the application
 - Press 's' to take a screenshot
 - Press 'h' to toggle help text display
 - Press 'e' to toggle eye detection on/off
 
 ### 🏧 ATM Security Prototype
-Run the ATM security prototype:
-
-```bash
-python atm_security_prototype.py
-```
-
-Or use the provided batch file (Windows):
-
-```
-run_atm_security.bat
-```
-
-**For advanced security features** (Deep Learning, Kalman Filter, Anti-Spoofing):
-
-```
-run_advanced_security.bat
-```
-
-**Controls:**
 - Press 'q' to quit the camera application
 - Press 's' to take a manual screenshot
 - Press 'k' to open/close the keypad window
 - Press 'h' to toggle help display
 - Press 'a' to display analytics report (advanced version only)
+
+## Repository Structure
+
+```
+face_tracker.py              # Simple face detection program
+advanced_face_tracker.py     # Enhanced version with eye detection
+atm_security_prototype.py    # ATM security prototype
+main.py                      # Advanced version with skeleton detection
+requirements.txt             # Project dependencies
+README.md                    # This documentation file
+
+# Batch files for easy execution
+run_face_tracker.bat         # Runs the simple face tracker
+run_advanced_face_tracker.bat # Runs the advanced face tracker
+run_atm_security.bat         # Runs the ATM security prototype
+run_advanced_security.bat    # Runs the advanced security version
+run_skeleton_tracker.bat     # Runs the skeleton detection version
+
+# Directories
+screenshots/                 # For storing manual screenshots
+security_screenshots/        # For automatic security breach captures
+logs/                        # For security event logs
+models/                      # For DNN face detection models
+```
 
 **How it Works:**
 1. **Camera Window**: Shows live feed with face detection
@@ -160,24 +167,6 @@ run_advanced_security.bat
 - 👥 **Multiple People**: Security breach mode, red warnings, PIN entry blocked
 - 📸 **Auto Documentation**: Screenshots automatically saved during security events
 - 🔊 **Audio Alerts**: Warning sounds when multiple people detected
-
-## Configuration
-
-### Simple Face Tracker
-You can customize the simple face tracker by modifying the `CONFIG` dictionary in the `face_tracker.py` file:
-
-| Parameter | Description | Default Value |
-|-----------|-------------|---------------|
-| `camera_id` | Camera device ID | 0 (built-in webcam) |
-| `frame_width` | Width of camera frame | 640 |
-| `frame_height` | Height of camera frame | 480 |
-| `box_color` | Color of face bounding box (BGR format) | (0, 255, 0) (green) |
-| `box_thickness` | Thickness of bounding box lines | 2 |
-| `min_face_size` | Minimum face size to detect | (30, 30) |
-| `scale_factor` | How much the image size is reduced at each scale | 1.1 |
-| `min_neighbors` | How many neighbors each candidate rectangle should have | 5 |
-| `show_fps` | Whether to display FPS counter | True |
-| `flip_horizontal` | Flip the camera horizontally (mirror mode) | True |
 
 ### Advanced Face Tracker
 The advanced face tracker has additional configuration options in the `CONFIG` dictionary in the `advanced_face_tracker.py` file:
@@ -243,12 +232,15 @@ The ATM security system can be customized by modifying the `CONFIG` dictionary i
 | `dnn_confidence` | Confidence threshold for DNN detection | 0.7 |
 | `dnn_model_path` | Path to DNN model files | 'models/' |
 | `log_dir` | Directory for storing log files | 'logs/' |
+| `enable_skeleton_detection` | Enable YOLO pose detection | True |
+| `skeleton_model_path` | Path to YOLO pose model | 'yolo11n-pose.pt' |
 
 #### Output Directories
 - **Screenshots**: `screenshots/` (manual screenshots)
 - **Security Screenshots**: `security_screenshots/` (automatic security breach captures)
 - **Logs**: `logs/` (security event logs and analytics)
 - **Models**: `models/` (DNN face detection models)
+- **YOLO Models**: Project root directory (YOLO pose model files)
 
 ## How It Works
 
@@ -256,6 +248,13 @@ The ATM security system can be customized by modifying the `CONFIG` dictionary i
 The base version uses the Haar Cascade classifier from OpenCV, which is a machine learning-based approach where a cascade function is trained from many positive and negative images. It's particularly efficient for face detection.
 
 The advanced security version also implements Deep Neural Network (DNN) based face detection from OpenCV, which provides better accuracy and robustness compared to Haar Cascade, especially in challenging lighting conditions and different face orientations.
+
+### Skeleton Detection
+The enhanced version implements YOLO (You Only Look Once) v11 pose detection:
+1. **Real-time Detection**: Identifies human body key points in the video stream
+2. **Pose Estimation**: Maps the skeletal structure of detected persons
+3. **Visualization**: Overlays skeleton visualization on the camera feed
+4. **Result**: Adds another layer of security monitoring through body pose analysis
 
 ### Kalman Filter Tracking
 The advanced security version implements a full Kalman filter for face tracking:
